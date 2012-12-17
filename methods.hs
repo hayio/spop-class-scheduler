@@ -42,3 +42,12 @@ removeClasses removeDay removeHour [] = []
 removeClasses removeDay removeHour ((Classes a b c day hour) : xs)
   | day /= removeDay || hour /= removeHour = (Classes a b c day hour) : removeClasses removeDay removeHour xs
   | otherwise                              = removeClasses removeDay removeHour xs
+
+-- metody dla automatycznego schedulera  
+scheduleForAll :: [Group] -> [Classroom] -> [Classes]
+scheduleForAll [] _ = []
+scheduleForAll ((Group name groupCourses) : xs) rooms = (scheduleForGroup name groupCourses rooms) ++ (scheduleForAll xs rooms) 
+    
+scheduleForGroup :: GroupName -> [Course] -> [Classroom] -> [Classes]
+scheduleForGroup name [] _ = []
+scheduleForGroup name (course : cs) (room : rs) = (Classes name course room 5 6) : (scheduleForGroup name cs (room : rs))

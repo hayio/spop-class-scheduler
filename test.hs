@@ -8,6 +8,7 @@ import CourseModifier
 import ClassroomModifier
 import ClassesModifier
 import Model
+import AutomateSchedule
 
 -- Testy, przypadki uzycia
 
@@ -43,3 +44,7 @@ m33 = changeClassroom (Classroom 5) (Classroom 55) g44
 -- ponizej testy dla zajec (grupa-przedmiot-sala
 modelCls1 = addClasses (Classes "g2" (Course "course1") (Classroom 5) 7 2) g44
 modelCls2 = removeClassesByTime 5 1 modelCls1
+
+-- ponizej testy dla automatycznego ukladania planu
+modelAu = cleanClasses g44
+modelScheduled = schedule modelAu
