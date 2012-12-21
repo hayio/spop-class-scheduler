@@ -1,6 +1,7 @@
 module ClassroomModifier where
 import Model
 import Classroom
+import Classes
 import Methods
 
 class ClassroomModifier cr where
@@ -9,6 +10,7 @@ class ClassroomModifier cr where
     
     createClassroom :: Classroom -> cr -> cr
     changeClassroom :: Classroom -> Classroom -> cr -> cr
+    deleteClassroom :: Classroom -> cr -> cr
 
 instance ClassroomModifier Model where
     getClassrooms (Model _ _ classrooms _)     = classrooms
@@ -19,3 +21,7 @@ instance ClassroomModifier Model where
     changeClassroom toChange newVal (Model gr co rooms classes) = Model gr co changedRooms changedClasses where
         changedRooms = replace toChange newVal rooms
         changedClasses = replaceClassesRooms toChange newVal classes
+        
+    deleteClassroom toDelete (Model gr co rooms classes) = Model gr co changedRooms changedClasses where
+        changedRooms = filter (/= toDelete) rooms
+        changedClasses = filter (\ (Classes _ _ room _ _) -> room /= toDelete) classes
