@@ -6,14 +6,15 @@ import Model
 import Course
 import Classroom
 import Methods
+import Config
 
--- Automatyczne układanie planu
+-- Automatyczne ukladanie planu
 
 class AutomateSchedule s where
     cleanClasses      :: s -> s
-    schedule          :: s -> s
+    schedule          :: s -> Config -> s
 
 instance AutomateSchedule Model where
     cleanClasses (Model a b c _) = Model a b c []
-    schedule (Model groups courses rooms _) = Model groups courses rooms classes where
-        classes = scheduleForAll groups rooms
+    schedule (Model groups courses rooms _) config = Model groups courses rooms classes where
+        classes = scheduleForAll groups rooms [] config

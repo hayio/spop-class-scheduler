@@ -10,7 +10,7 @@ class ClassesModifier cls where
     setClasses :: [Classes] -> cls -> cls
     
     addClasses :: Classes -> cls -> cls
-    removeClassesByTime :: WeekDay -> HourTime -> cls -> cls
+    removeClassesByTime :: WeekDay -> DayTime -> cls -> cls
 
 instance ClassesModifier Model where
     getClasses (Model _ _ _ cls)         = cls

@@ -4,6 +4,7 @@ import Course
 import Methods
 import Group
 
+-- Klasa odpowiadajaca za zmienianie stanu modelu poprzez dodawanie/edycje/usuwanie modelu
 class CourseModifier c where
     getCourses      :: c -> [Course]
     setCourses      :: [Course] -> c -> c
