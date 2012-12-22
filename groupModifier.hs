@@ -13,8 +13,10 @@ class GroupModifier g where
     
     createGroup             :: GroupName -> g -> g
     changeGroupName         :: GroupName -> GroupName -> g -> g
-    addCourseToGroup        :: Course -> GroupName -> g -> g
+    -- Dodaj przedmiot do grupy (przedmiot -> liczba godzin tygodinowo -> nazwa grupy -> model = model)
+    addCourseToGroup        :: Course -> Int -> GroupName -> g -> g
     removeCourseFromGroup   :: Course -> GroupName -> g -> g
+    deleteGroup             :: GroupName -> g -> g
 
 instance GroupModifier Model where
     getGroups (Model groups _ _ _)                  = groups
@@ -29,11 +31,15 @@ instance GroupModifier Model where
         (Group _ courses)       = head (filter (\ (Group name1 _) -> name1 == toChange) groups)
         newClasses              = replaceClassesGroupName toChange newVal classes
         
-    addCourseToGroup course groupName (Model groups courses rooms classes) = Model newGroups courses rooms classes where
+    addCourseToGroup course quantity groupName (Model groups courses rooms classes) = Model newGroups courses rooms classes where
         newGroups   = replace (Group groupName []) (Group groupName newCourses) groups
-        newCourses  = course : (findGroupCourses (Group groupName []) groups)
+        newCourses  = (sumCourses course quantity) ++ (findGroupCourses (Group groupName []) groups)
         
     removeCourseFromGroup course groupName (Model groups courses rooms classes) = Model groupsChanged courses rooms classesChanged where
         groupsChanged = replace (Group groupName []) (Group groupName groupCourses) groups
         groupCourses  = filter (/= course) (findGroupCourses (Group groupName []) groups)
         classesChanged = filter (\ (Classes name c _ _ _) -> name /= groupName || c /= course ) classes
+        
+    deleteGroup groupName (Model groups courses rooms classes) = Model newGroups courses rooms changedClasses where
+        newGroups   = filter (/=(Group groupName [])) groups
+        changedClasses = filter (\ (Classes name _ _ _ _) -> name /= groupName) classes

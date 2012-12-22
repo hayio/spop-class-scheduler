@@ -14,6 +14,9 @@ replace y z (x:xs)
   | x==y           = z:replace y z xs
   | otherwise      = x:replace y z xs
   
+sumCourses :: Course -> Int -> [Course]
+sumCourses course 1 = [course]
+sumCourses course q = course : (sumCourses course (q - 1))
   
 replaceClassesGroupName :: GroupName -> GroupName -> [Classes] -> [Classes]
 replaceClassesGroupName y z [] = []
